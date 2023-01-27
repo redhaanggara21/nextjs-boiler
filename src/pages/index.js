@@ -1,39 +1,65 @@
 import Head from "next/head";
-
+import { useEffect } from "react";
 import Header from "../components/Header";
-// import DecorIntersect from "./images/decor-intersect-1.svg";
-// import DecorTextUnderline from "images/hero-decor-1.svg";
-// import DecorPlus1 from "images/decor-plus-style-1.svg";
-// import DecorSwirl1 from "images/swirl-decor-1.svg";
-// import DecorEllips1 from "images/decor-ellips-style-1.svg";
-// import Facebook from "images/facebook.svg";
-// import Instagram from "images/instagram.svg";
-// import Twitter from "images/twitter.svg";
+import DecorIntersect from "../images/decor-intersect-1.svg";
+import DecorTextUnderline from "../images/hero-decor-1.svg";
+import DecorPlus1 from "../images/decor-plus-style-1.svg";
+import DecorSwirl1 from "../images/swirl-decor-1.svg";
+import DecorEllips1 from "../images/decor-ellips-style-1.svg";
+import Facebook from "../images/facebook.svg";
+import Instagram from "../images/instagram.svg";
+import Twitter from "../images/twitter.svg";
 
 import Link from "next/link";
 import Image from "next/image";
-// import Testimonials from "components/Testimonials";
+import * as Sentry from "@sentry/nextjs";
+import { captureException, setContext } from "@sentry/nextjs";
+import Testimonials from "../components/Testimonials";
+
+export async function getServerSideProps(){
+  const token = 'abcadredx';
+  const req = await fetch("https://github.com/getuser/blabdlasb",{
+    method: 'PUT',
+    headers: {
+      'Authorization': 'Bearer ' + token
+    }
+  });
+  if(!req.ok){
+    // throw new Error("SSR Error test");
+    // https://docs.sentry.io/platforms/javascript/guides/nextjs/enriching-events/context/
+    setContext("data capture sentry passing", {
+      name: "Mighty Fighter",
+      age: 23,
+      attack_type: "hit",
+      token: token // just for example
+    });
+    captureException(
+      "error on server side props page index.js yoy!"
+    );
+  }
+  return{
+      props: {}
+  }
+}
 
 export default function Home() {
-//checkgit
-  useEffect(() => {
-    import('react-facebook-pixel')
-      .then((x) => x.default)
-      .then((ReactPixel) => {
-        ReactPixel.init('FACEBOOK_PIXEL_ID')
-        ReactPixel.pageView()
 
-        router.events.on('routeChangeComplete', () => {
-          ReactPixel.pageView()
-        })
+  useEffect(() => {
+    import('react-facebook-pixel').then((x) => x.default).then((ReactPixel) => {
+        ReactPixel.init('FACEBOOK_PIXEL_ID')
+        ReactPixel.pageView();
       })
-  }, [router.events])
+  }, [])
+
+  const handleClick = function(){
+    throw new Error("Sentry Frontend Error");
+  }
   
   return (
     <div>
       <Head>
-        <title>Dopi</title>
-        <meta name="description" content="Dopi redX" />
+        <title>Jadoo</title>
+        <meta name="description" content="Jadoo redha bayu anggara" />
 
         <meta
           name="description"
@@ -58,13 +84,13 @@ export default function Home() {
       </Head>
 
       <div className="absolute z-10 w-full py-12">
-        {/* <Header /> */}
+        <Header />
       </div>
 
       {/* Hero Section */}
       <section className="relative mb-28">
         <span className="absolute w-5/12 h-screeen right-0 top-0 bottom-0 ">
-          {/* <DecorIntersect className="fill-accent-3" /> */}
+          <DecorIntersect className="fill-accent-3" />
         </span>
         <div className="w-96 h-96 bg-accent-4/50 rounded-full blur-3xl absolute -left-80 -top-10"></div>
 
@@ -102,6 +128,13 @@ export default function Home() {
                   </span>
                   <span className="text-gray-500">Play Demo</span>
                 </button>
+
+                <button
+                  type="button"
+                  onClick={ handleClick }>
+                  Throw error
+                </button>
+
               </div>
             </div>
 
@@ -472,7 +505,7 @@ export default function Home() {
       </section>
 
       {/* Testimonials */}
-      {/* <Testimonials /> */}
+      <Testimonials />
 
       {/* partnership */}
       <section className="mb-28">
