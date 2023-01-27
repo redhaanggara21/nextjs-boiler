@@ -15,7 +15,7 @@ import Image from "next/image";
 // import Testimonials from "components/Testimonials";
 
 export default function Home() {
-
+//checkgit
   useEffect(() => {
     import('react-facebook-pixel')
       .then((x) => x.default)
