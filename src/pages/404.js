@@ -11,10 +11,6 @@ export default function Custom404() {
             route.push("/");
         },2000);
 
-        // return () => {
-        //     cleanup
-        // }
-
     }, [])
 
     return (
